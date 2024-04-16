@@ -3,3 +3,11 @@
 - it looks for a bootable dis and start booting our OS kernel
 -  It also needs to switch the CPU from the 16-bit real mode first to the 32-bit protected mode, and then to the 64-bit long mode.
 - Its third job is to query certain information (such as a memory map) from the BIOS and pass it to the OS kernel.
+
+
+
+dd if=target/x86_64-blog_os/debug/bootimage-blog_os.bin of=/dev/sdX && sync
+
+change sdX to USB name.
+
+VGA text mode -> easy way to print text on the screen 
