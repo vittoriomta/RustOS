@@ -1,0 +1,5 @@
+- turn on 
+- execute firmware stored inside the ROM -> power on self test -> detects RAM -> pre-initialize CPU and hardware 
+- it looks for a bootable dis and start booting our OS kernel
+-  It also needs to switch the CPU from the 16-bit real mode first to the 32-bit protected mode, and then to the 64-bit long mode.
+- Its third job is to query certain information (such as a memory map) from the BIOS and pass it to the OS kernel.
