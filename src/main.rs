@@ -11,9 +11,20 @@ use rust_os::println;
 pub extern "C" fn _start() -> ! {
     println!("Hello World{}", "!");
 
+    rust_os::init(); // new
+
+    fn stack_overflow() {
+        stack_overflow(); // for each recursion, the return address is pushed
+    }
+
+    // trigger a stack overflow
+    stack_overflow();
+
+    // as before
     #[cfg(test)]
     test_main();
 
+    println!("It did not crash!");
     loop {}
 }
 
