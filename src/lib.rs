@@ -12,15 +12,16 @@ pub mod gdt;
 
 use core::panic::PanicInfo;
 
-pub trait Testable {
-    fn run(&self) -> ();
-}
-
 pub fn init() {
     gdt::init();
     interrupts::init_idt();
+    unsafe { interrupts::PICS.lock().initialize() }; // new
+    x86_64::instructions::interrupts::enable(); 
 }
 
+pub trait Testable {
+    fn run(&self) -> ();
+}
 
 impl<T> Testable for T
 where
@@ -45,7 +46,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
-    loop {}
+    hlt_loop();         // new
 }
 
 /// Entry point for `cargo test`
@@ -54,7 +55,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     init();      // new
     test_main();
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]
@@ -79,5 +80,9 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
     }
 }
 
-
+pub fn hlt_loop() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
+}
 
